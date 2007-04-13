@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*"
+	xmlns:flexunit="flexunit.flexui.*"
+	width="950" height="700"
+	creationComplete="onCreationComplete()">
+
+
+	<mx:Script>
+		<![CDATA[
+			import flexunit.framework.TestResult;
+			import memorphic.xpath.XPathTests;
+			
+			import flexunit.framework.TestSuite;
+			import memorphic.xpath.XPathTests;
+						
+			private function onCreationComplete():void
+			{
+				//TestResult.rethrowErrors = true;
+				testRunner.test = createSuite();
+				testRunner.startTest();	
+			}
+			
+			private function createSuite():TestSuite
+			{
+				var ts:TestSuite = new TestSuite();
+			
+				ts.addTestSuite(XPathTests);
+				return ts;
+			}
+
+		]]>
+	</mx:Script>
+	
+
+	<mx:Canvas width="100%" height="100%">
+		<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%" />
+		
+	</mx:Canvas>
+</mx:Application>
