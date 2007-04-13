@@ -32,7 +32,7 @@
 
 package memorphic.xpath.model
 {
-	final public class NodeTypes
+	public class NodeTypes
 	{
 		public static const COMMENT:String = "comment";
 		public static const TEXT:String = "text";

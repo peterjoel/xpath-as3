@@ -81,17 +81,9 @@ package memorphic.xpath.model
 		public var functions:Object;
 		
 		
-		/**
-		 * Setting this property to true will cause element position to be computed starting from
-		 * 0, instead of 1. The official XPath specification requires that position start from 1,
-		 * but Internet Explorer 5.0 (and possibly other implementations) are 0 indexed.
-		 */ 
+		
 		public var zeroIndexPosition:Boolean = false;
 		
-		
-		/**
-		 * 
-		 */ 
 		public var openAllNamespaces:Boolean = false;
 		
 				
@@ -100,9 +92,6 @@ package memorphic.xpath.model
 		internal var contextPosition:int;
 		internal var contextSize:int;
 
-
-		internal var documentWrapper:XML;
-		
 		
 		
 		public function XPathContext()

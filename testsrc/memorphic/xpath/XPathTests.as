@@ -37,7 +37,6 @@ package memorphic.xpath {
 	import memorphic.xpath.fixtures.XMLData;
 	import flexunit.framework.TestResult;
 	import memorphic.xpath.model.XPathContext;
-	import flash.utils.getTimer;
 	
 	
 	public class XPathTests extends TestCase {
@@ -91,14 +90,12 @@ package memorphic.xpath {
 			var expected:String = data.food.name.toXMLString();
 			for(var i:int=0; i<n; i++){
 
-				result = XPathQuery.execQuery(data, paths[i]) as XMLList;
+				result = XPathQuery.select(data, paths[i]);
 				assertTrue(i+" result should be XMLList", result is XMLList);
 				assertEquals(i+" should select 5 items", 5, result.length());
 				assertEquals(i+" should select a <name> node", "name", result[0].name());
 				assertEquals(i+" should match the expected result", expected, result.toXMLString());
-
 			}
-			
 		}
 		
 		
@@ -120,7 +117,7 @@ package memorphic.xpath {
 			var n:int = paths.length;
 			var expected:String = data.food.name.toXMLString();
 			for(var i:int=0; i<n; i++){
-				result = XPathQuery.execQuery(data, paths[i]);
+				result = XPathQuery.select(data, paths[i]);
 				assertEquals(i+" should be only one element", 1, result.length());
 				assertEquals(i+" check name", "Strawberry Belgian Waffles", result.toString());
 				assertEquals(i+" should be second element", data.food.name[1], result[0]);
@@ -165,23 +162,16 @@ package memorphic.xpath {
 			
 			assertEquals("Shouldn't match anything - I didn't map the namespace", 0, result.length());
 			
-			xpath.context.openAllNamespaces = true;
+			xpath.context.openAllNamespaces = true
 			var result2:XMLList = xpath.exec(data);
 			assertEquals("only select one node", 1, result2.length());
 			assertEquals("local name should be <head>", "head", result2[0].localName());
-			
-			
-			xpath.context.openAllNamespaces = false;
-			var result3:XMLList = xpath.exec(data);
-			assertEquals("Shouldn't match anything - I didn't map the namespace", 0, result3.length());
-			
 			
 		}
 		
 		
 		public function testVariables():void
 		{
-			var vars:Object 
 		}
 
 
@@ -202,43 +192,6 @@ package memorphic.xpath {
 			assertEquals("only select one node", 1, result.length());
 			assertEquals("check name", "Strawberry Belgian Waffles", result.toString());
 		}
-		
-		
-		public function testDescendants():void
-		{
-			var data:XML = XMLData.cdCatalogXML;
-			var xpath:XPathQuery = new XPathQuery( "//*[1]/attribute::id");
-			assertEquals("check id att", "cd1", xpath.exec(data));
-		}
-		
-		public function testAttribute():void
-		{
-			var data:XML = XMLData.cdCatalogXML;
-			var xpath:XPathQuery = new XPathQuery( "CATALOG/CD[1]/attribute::id");
-			assertEquals("1 check id att", "cd1", xpath.exec(data));
-			xpath = new XPathQuery( "CATALOG/CD[1]/@id");
-			assertEquals("2 check id att", "cd1", xpath.exec(data));
-			
-		}
-		
-		public function testAssociativity():void
-		{
-			var xpath:XPathQuery = new XPathQuery("(3 > 2) > 1");
-			assertFalse("This is coerced left-associativity > ", xpath.exec(null));
-			xpath = new XPathQuery("3 > (2 > 1)");
-			assertTrue("make sure that the opposite associativity is different > ", xpath.exec(null));
-			xpath = new XPathQuery("3 > 2 > 1");
-			assertFalse("should be left-associative > ", xpath.exec(null));
-			
-			xpath = new XPathQuery("(6 * 2) mod 3");
-			assertEquals("This is coerced left-associativity- mod", 0, xpath.exec(null));
-			xpath = new XPathQuery("6 * (2 mod 3)");
-			assertEquals("make sure that the opposite associativity is different- mod", 12, xpath.exec(null));
-			xpath = new XPathQuery("6 * 2 mod 3");
-			assertEquals("should be left-associative- mod", 0, xpath.exec(null));
-		}
-		
-
 	}
 		
 }

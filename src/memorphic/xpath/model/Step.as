@@ -78,31 +78,14 @@ package memorphic.xpath.model
 	 * 				| AbbreviatedAxisSpecifier
 	 * 
 	 *  	
-	 * 
-	 * Since we have added constants for common use-case abbreviated syntax, all properties are private to
-	 * enforce immutibility.
 	 */ 
-	final public class Step
+	public class Step
 	{
 		
+		public var axis:Axis;
+		public var nodeTest:INodeTest;
 		
-		public static const ABBREVIATED_DESC_OR_SELF:Step = 
-			new Step(new Axis(AxisNames.DESCENDANT_OR_SELF), new NodeTypeTest(NodeTypes.NODE), null);
-		
-		public static const ABBREVIATED_SELF:Step = 
-			new Step(new Axis(AxisNames.SELF), new NodeTypeTest(NodeTypes.NODE), null);
-		
-		public static const ABBREVIATED_PARENT:Step = 
-			new Step(new Axis(AxisNames.PARENT), new NodeTypeTest(NodeTypes.NODE), null);
-			
-		public static const ABBREVIATED_CHILD:Step = 
-			new Step(new Axis(AxisNames.CHILD), new NodeTypeTest(NodeTypes.NODE), null);
-		
-		
-		private var axis:Axis;
-		private var nodeTest:INodeTest;
-		
-		private var predicateList:PredicateList;
+		public var predicateList:PredicateList;
 		
 		
 		public function Step(axis:Axis, nodeTest:INodeTest, predicateList:PredicateList)

@@ -34,14 +34,14 @@ package memorphic.xpath.model
 {
 	import memorphic.utils.XMLUtil;
 	
-	final public class PathExpr implements IExpression
+	public class PathExpr implements IExpression
 	{
 		
 		
-		private var filterExpr:IExpression;
-		private var locationPath:LocationPath;
+		public var filterExpr:FilterExpr;
+		public var locationPath:LocationPath;
 		
-		public function PathExpr(filterExpr:IExpression, path:LocationPath)
+		public function PathExpr(filterExpr:FilterExpr, path:LocationPath)
 		{
 			this.filterExpr = filterExpr;
 			this.locationPath = path;
@@ -55,7 +55,7 @@ package memorphic.xpath.model
 		public function selectXMLList(context:XPathContext):XMLList
 		{
 			var result:XMLList = new XMLList();
-			var filterExprResult:XMLList = XMLList(filterExpr.exec(context));
+			var filterExprResult:XMLList = filterExpr.selectXMLList(context);
 			var len:int = filterExprResult.length();
 			context = context.copy(false);
 			context.contextSize = len;

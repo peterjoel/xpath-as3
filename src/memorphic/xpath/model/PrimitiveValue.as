@@ -32,14 +32,10 @@
 
 package memorphic.xpath.model
 {
-	final public class PrimitiveValue implements IExpression
+	public class PrimitiveValue implements IExpression
 	{
 		
-		
-		public static const ZERO:PrimitiveValue = new PrimitiveValue(0);
-		
-		
-		private var value:Object;
+		public var value:Object;
 		
 		public function PrimitiveValue(value:Object)
 		{

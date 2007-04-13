@@ -37,11 +37,11 @@ package memorphic.xpath.model
 	 * A list of predicates, extracted into its own class to avoid duplicating the same
 	 * functionality in two places: Step and FilterExpr.
 	 */ 
-	final public class PredicateList
+	public class PredicateList
 	{
 		
 		
-		private var predicates:Array;
+		public var predicates:Array;
 
 		
 		public function PredicateList(predicates:Array)

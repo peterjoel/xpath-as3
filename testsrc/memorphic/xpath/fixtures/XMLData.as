@@ -53,10 +53,6 @@ package memorphic.xpath.fixtures
 		public static function get cdCatalogXML():XML{
 			return CD_CAT.copy();
 		}
-		public static function get registerHTML():XML{
-			return REGISTER.copy();
-		}
-
 
 
 		[Embed(source="flash_xpath.rdf", mimeType="application/octet-stream")]
@@ -75,10 +71,6 @@ package memorphic.xpath.fixtures
 		private static const MENU_RAW:Class;
 		private static const MENU:XML = parseXML(new MENU_RAW());
 
-
-		[Embed(source="register.html", mimeType="application/octet-stream")]
-		private static const REGISTER_RAW:Class;
-		private static const REGISTER:XML = parseXML(new REGISTER_RAW());
 
 
 		private static function parseXML(data:ByteArray):XML{

@@ -93,11 +93,11 @@ package memorphic.xpath.model
 	 * 
 	 * 
 	 */
-	final public class Axis
+	public class Axis
 	{
 		
 		
-		private var axisSpecifier:String;
+		public var axisSpecifier:String;
 		
 		
 		
@@ -113,7 +113,6 @@ package memorphic.xpath.model
 		 */ 		
 		public function selectAxis(context:XPathContext):XMLList
 		{
-			// TODO: check that the result of each axis excludes context.documentWrapper
 			var node:XML = context.contextNode;
 			switch(axisSpecifier){
 				

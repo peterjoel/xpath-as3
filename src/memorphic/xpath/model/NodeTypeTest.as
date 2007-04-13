@@ -39,9 +39,9 @@ package memorphic.xpath.model
 	 * @see INodeTest
 	 * 
 	 */ 
-	final public class NodeTypeTest implements INodeTest {
+	public class NodeTypeTest implements INodeTest {
 		
-		private var nodeType:String;
+		public var nodeType:String;
 		
 		public function NodeTypeTest(type:String)
 		{

@@ -32,6 +32,7 @@
 
 package memorphic.xpath.model
 {
+	import flash.xml.XMLNodeType;
 	import memorphic.utils.XMLUtil;
 	
 	
@@ -108,10 +109,6 @@ package memorphic.xpath.model
 		 * 		id("foo") selects the element with unique ID foo
 		 * 
 		 * 		id("foo")/child::para[position()=5] selects the fifth para child of the element with unique ID foo
-		 * 
-		 * 
-		 * Contrary to the spec, I have permitted id to reside in any namespace, as opposed to xml:id, which does not
-		 * reflect the vast majority of usage. TODO: Perhaps this could be made into an optional feature via a flag? 
 		 */
 		public function id(context:XPathContext, idArg:Object):XMLList
 		{
@@ -123,11 +120,10 @@ package memorphic.xpath.model
 				}
 			}else{
 				idArg = idArg.toString();
-				result = XMLUtil.rootNode(context.contextNode).descendants().(attribute("id") == idArg);
-				if(result.length() > 0){
+				result = XMLUtil.rootNode(context.contextNode).descendants().(@id == idArg);
+				if(result.length() > 1){
 					result = XMLList(result[0]);
 				}
-			
 			}
 			return result;
 		}
@@ -174,10 +170,8 @@ package memorphic.xpath.model
 			var node:XML;
 			if(nodeSet == null){
 				node = context.contextNode;
-			}else if (nodeSet.length() > 0){
-				node = nodeSet[0];
 			}else{
-				return "";
+				node = nodeSet[0];
 			}
 			return node.namespace().uri;
 		}
@@ -202,7 +196,7 @@ package memorphic.xpath.model
 			var node:XML;
 			if(nodeSet == null){
 				node = context.contextNode;
-			}else if(nodeSet.length() == 0){
+			}else if(nodeSet.length() > 0){
 				return "";
 			}else{
 				node = nodeSet[0];
@@ -263,9 +257,13 @@ package memorphic.xpath.model
 		public function string(context:XPathContext, arg:Object=null):String
 		{
 			if(arg == null){
-				return TypeConversions.toString(context.contextNode.toString());
+				return context.contextNode.toString();
+			}else if(arg is String){
+				return arg as String;
+			}else if(arg is XMLList){
+				return arg[0].toString();
 			}else{
-				return TypeConversions.toString(arg);
+				return arg.toString();
 			}
 		}
 		
@@ -350,7 +348,7 @@ package memorphic.xpath.model
 			if(index == -1){
 				return "";
 			}else{
-				return basket.substr(index+ apple.length);
+				return basket.substr(index);
 			}
 		}
 		
@@ -365,9 +363,9 @@ package memorphic.xpath.model
 		public function substring(context:XPathContext, string:*, from:*, length:*=null):String
 		{
 			if(length == null){
-				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from)-1);
+				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from));
 			}else{
-				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from)-1, TypeConversions.toNumber(length));
+				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from), TypeConversions.toNumber(length));
 			}
 		}
 		
@@ -401,19 +399,11 @@ package memorphic.xpath.model
 				string = context.contextNode;
 			}
 			var str:String = TypeConversions.toString(string);
-			if(str == ""){
-				return "";
-			}
 			// replace any blocks of whitespace with a single space
 			str = str.replace(/\s+/g, " ");
 			// now trim the ends
 			var r:RegExp = /^\s?(\S.*\S)\s?$/;
-			var matches:Object = r.exec(str);
-			if(matches){
-				return matches[1];
-			}else{
-				return "";
-			}
+			return r.exec(str)[1];
 		}
 		
 		

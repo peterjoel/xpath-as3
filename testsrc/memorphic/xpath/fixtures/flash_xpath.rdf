@@ -114,8 +114,6 @@
             <dc:identifier>6F2B0304B2540960BA29DA26B0E1998D</dc:identifier>
         </item>
 
-        
-
         <item rdf:about="http://aralbalkan.com/730">
             <title>Chris Orwig on Teaching Flash Website Design/Development</title>
             <link>http://weblogs.macromedia.com/mxna/controller.cfm?handler=PostHandler&amp;action=click&amp;postId=112218&amp;nextPage=http%3A%2F%2Faralbalkan%2Ecom%2F730</link>
@@ -124,7 +122,9 @@
             <dc:creator>Aral Balkan</dc:creator>
             <dc:date>2006-09-12T19:53:59.0-00:00</dc:date>
             <dc:identifier>11ACB3854979D3CF21520656DC499AD9</dc:identifier>
-        </item><item rdf:about="http://aralbalkan.com/729">
+        </item>
+
+        <item rdf:about="http://aralbalkan.com/729">
             <title>Daniel Dura on Apollo</title>
             <link>http://weblogs.macromedia.com/mxna/controller.cfm?handler=PostHandler&amp;action=click&amp;postId=112215&amp;nextPage=http%3A%2F%2Faralbalkan%2Ecom%2F729</link>
             <description><![CDATA[Some notes from the session: Project is in early development Individual items/features subject to change Accurate as of today (he's showing the latest build from last night) Not mock-up, etc. Everything he's showing us is working version What is Apollo? Apollo is a cross-OS runtime for building RIAs. Leverage skills in Flash, Flex, HTML, Ajax to build and deploy desktop RIAs. [...]]]></description>

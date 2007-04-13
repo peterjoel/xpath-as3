@@ -39,11 +39,11 @@ package memorphic.xpath.model
 	 * @see INodeTest
 	 * 
 	 */ 
-	final public class NameTest implements INodeTest {
+	public class NameTest implements INodeTest {
 		
 		
-		private var prefix:String;
-		private var localName:String;
+		public var prefix:String;
+		public var localName:String;
 		
 		public function NameTest(prefix:String, localName:String)
 		{
@@ -58,10 +58,6 @@ package memorphic.xpath.model
 		public function test(context:XPathContext):Boolean
 		{
 			var node:XML = context.contextNode;
-			if(!(node.nodeKind() == "element" || node.nodeKind() == "attribute")){
-				// XXX: or processing-instruction?? - or do I even need to check?????
-				return false;
-			}
 			if(context.openAllNamespaces || prefix=="*"){
 				if(localName == "*"){
 					return true;
@@ -76,11 +72,8 @@ package memorphic.xpath.model
 					// TODO: find a better error type
 					throw new Error("There is no namespace mapped to the prefix '"+prefix+"'.");
 					
-				}else if(localName == "*" || localName == node.localName()){
-					
-					return node.namespace().uri == uri;
 				}else{
-					return false;
+					return (node.localName()==localName && node.namespace().uri == uri);
 				}
 			}
 		}

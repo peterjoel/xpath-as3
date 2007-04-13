@@ -34,7 +34,7 @@ package memorphic.xpath.model
 {
 	import memorphic.utils.XMLUtil;
 	
-	final public class LocationPath implements IExpression
+	public class LocationPath implements IExpression
 	{
 		
 		public var steps:Array; // of Step
@@ -87,6 +87,16 @@ package memorphic.xpath.model
 		
 	
 		
-
+		public function execRoot(xml:XML, context:XPathContext):XMLList
+		{
+			// xpath requires root "/" to be parent of the document root. We also need
+			// an XMLList instead of XML
+			var wrappedXML:XMLList = <><parent-of-root/></>;
+			XML(wrappedXML).appendChild(xml);
+			context.contextNode = wrappedXML[0];
+			context.contextPosition = 0;
+			context.contextSize = 1;
+			return selectXMLList(context);
+		}
 	}
 }

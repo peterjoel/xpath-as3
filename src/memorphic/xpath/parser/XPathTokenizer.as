@@ -40,7 +40,6 @@ package memorphic.xpath.parser
 	import memorphic.parser.TokenMetrics;
 	import memorphic.xpath.model.AxisNames;
 	import memorphic.xpath.model.NodeTypes;
-	import memorphic.xpath.model.Operators;
 
 	/**
 	 * W3C XPath 1.0 Recommendation at http://www.w3.org/TR/xpath
@@ -103,7 +102,7 @@ package memorphic.xpath.parser
 					| NCName ':' '*'
 					| QName
 			 
-			@see XPathSyntaxTree	 
+			@see #createToken() 	 
 		*/	
 			
 		
@@ -148,7 +147,7 @@ package memorphic.xpath.parser
 			 
 			Note: //,/ <, <= and >= are in size order, to ensure largest match (TODO: find out why this is necessary)		
 		*/
-		pattern static const Operator:String = MultiplyOperator + "|" + buildRegExpORList("// / | + - = != <= >= < >");
+		pattern static const Operator:String = OperatorName + "|" + MultiplyOperator + "|" + buildRegExpORList("// / | + - = != <= >= < >");
 
 		/**
 			[31] Digits ::=
@@ -259,7 +258,6 @@ package memorphic.xpath.parser
 			case XPathToken.NAME_TEST:
 			case XPathToken.NODE_TYPE:
 			case XPathToken.OPERATOR:
-			case XPathToken.OPERATOR_NAME:
 			case XPathToken.FUNCTION_NAME:
 			case XPathToken.AXIS_NAME:
 			case XPathToken.LITERAL:
@@ -280,11 +278,10 @@ package memorphic.xpath.parser
 		private static function tokenMayPrecedeOperator(token:Token) : Boolean
 		{
 			switch (token.value){
-			case "@": case "::": case "(": case "[": case ",":
-			case ":": case "/": case "//":
+			case "@": case "::": case "(": case "[": case ",": case ":":
 				return false;
 			default:
-				if (token.tokenType == XPathToken.OPERATOR || token.tokenType == XPathToken.OPERATOR_NAME){
+				if (token.tokenType == XPathToken.OPERATOR){
 					return false;
 				} else {
 					return true;
@@ -362,8 +359,7 @@ package memorphic.xpath.parser
 					}
 				}else if(type==XPathToken.LITERAL){
 					// remove the quotes from string literals
-					// value = value.substr(1, value.length-2);
-					// UPDATE:  DO NOT remove quotes because the string "/" will be interpreted as a path!
+					value = value.substr(1, value.length-2);
 				}
 			}
 			
@@ -372,10 +368,7 @@ package memorphic.xpath.parser
 		
 		
 		
-		/*
-			TODO: I think this will be a lot cleaner if we just emit NCNames and have the SyntaxTree
-			construct QNames instead.
-		*/
+		
 		private function resolveNCName(value:String, sourceIndex:int):Token
 		{
 			if(AxisNames.isAxisName(value)){

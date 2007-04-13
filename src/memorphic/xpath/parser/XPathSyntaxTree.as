@@ -34,7 +34,6 @@ package memorphic.xpath.parser
 {
 	import flash.errors.EOFError;
 	
-	import memorphic.parser.ParseError;
 	import memorphic.parser.SyntaxTree;
 	import memorphic.parser.SyntaxTreeItem;
 	import memorphic.parser.SyntaxTreeState;
@@ -52,7 +51,7 @@ package memorphic.xpath.parser
 	 * TODO: some optimizations:
 	 * 	- where logic is unaffected, re-order the tests to check most common (or quickest) matches first
 	 */
-	final public class XPathSyntaxTree extends SyntaxTree
+	public class XPathSyntaxTree extends SyntaxTree
 	{
 		
 		public namespace rule = "http://memorphic.com/ns/2007/xpath-grammar";
@@ -86,9 +85,6 @@ package memorphic.xpath.parser
 		public static const MULTIPLICATIVE_EXPR:String = "MultiplicativeExpr";
 		public static const UNARY_EXPR:String = "UnaryExpr";
 		
-		public static const QNAME:String = "QName";
-		public static const NAME_TEST:String = "NameTest";
-		
 		
 		
 
@@ -96,15 +92,7 @@ package memorphic.xpath.parser
 			super(tokenizer);
 		}
 
-		
-		public override function getTree():SyntaxTreeItem
-		{
-			Expr();
-			return super.getTree();
-		}
-		
-		
-		
+
 		/**
 		 * [1] LocationPath ::=
 		 * 			RelativeLocationPath
@@ -206,6 +194,7 @@ package memorphic.xpath.parser
 		rule function Step():Boolean
 		{
 			startRule(STEP);
+			//var state:SyntaxTreeState = getState();
 			if(AxisSpecifier()){
 				if(NodeTest()){
 					while(true){
@@ -217,6 +206,7 @@ package memorphic.xpath.parser
 				}
 			}
 			restartRule();
+			//restoreState(state);
 			if(AbbreviatedStep()){
 				return match();
 			}
@@ -350,7 +340,6 @@ package memorphic.xpath.parser
 			startRule(ABBREVIATED_ABSOLUTE_LOCATION_PATH);
 			try{
 				if(nextToken().value == "//"){
-					// discardToken();
 					if(RelativeLocationPath()){
 						return match();
 					}
@@ -428,6 +417,7 @@ package memorphic.xpath.parser
 		 * [14] Expr ::=
 		 * 			OrExpr
 		 * 
+		 * TODO: Expr and OrExpr can probably be combined, as an optimisation
 		 */
 		rule function Expr():Boolean
 		{
@@ -503,11 +493,8 @@ package memorphic.xpath.parser
 								// this does not need it's own try/catch because an
 								// eof here also means there cannot be a matching ")"
 								nextToken();
-								if(token.value == ","){
-									discardToken();
-									if(!Argument()){
-										throw new SyntaxError("Missing argument after ','.");
-									}
+								if(token.value == "," && Argument()){
+									
 								}else{
 									break;
 								}
@@ -518,8 +505,6 @@ package memorphic.xpath.parser
 						if(token.value == ")"){
 							discardToken();
 							return match();
-						}else{
-							throw new SyntaxError("Expected ')'.");
 						}
 					}
 				}
@@ -649,11 +634,8 @@ package memorphic.xpath.parser
 		 * 			AndExpr
 		 * 			| OrExpr 'or' AndExpr
 		 * 
-		 * which is (almost) equivalent to:
+		 * which is equivalent to:
 		 * 			AndExpr ( 'or' AndExpr )*
-		 * 
-		 * ...at the loss of associativity enforcement. 
-		 * Associativity is left-right and is enforced in the parser now.
 		 */
 		rule function OrExpr():Boolean
 		{
@@ -691,9 +673,6 @@ package memorphic.xpath.parser
 		 * 
 		 * which is equivalent to:
 		 * 			EqualityExpr ( 'and' EqualityExpr )*
-		 * 
-		 * ...at the loss of associativity enforcement. 
-		 * Associativity is left-right and is enforced in the parser now.
 		 */
 		rule function AndExpr():Boolean
 		{
@@ -726,9 +705,6 @@ package memorphic.xpath.parser
 		 * 
 		 * which is equivalent to:
 		 * 			RelationalExpr ( ( '=' | '!=' ) RelationalExpr )*
-		 * 
-		 * ...at the loss of associativity enforcement. 
-		 * Associativity is left-right and is enforced in the parser now.
 		 */
 		rule function EqualityExpr():Boolean
 		{
@@ -768,10 +744,6 @@ package memorphic.xpath.parser
 		 * 
 		 * which is equivalent to:
 		 * 			AdditiveExpr ( ( '<' | '>' | '<=' | '>=') AdditiveExpr)*
-		 * 
-		 * 
-		 * ...at the loss of associativity enforcement. 
-		 * Associativity is left-right and is enforced in the parser now.
 		 */
 		rule function RelationalExpr():Boolean
 		{
@@ -798,7 +770,7 @@ package memorphic.xpath.parser
 						&& AdditiveExpr())
 					{
 					}else{
-						break expr;
+						break;
 					}
 				}
 			}catch(e:EOFError){
@@ -855,9 +827,6 @@ package memorphic.xpath.parser
 		 * 
 		 * which is equivalent to:
 		 * 			UnaryExpr ((MultiplyOperator | 'div' | 'mod') UnaryExpr)*
-		 * 
-		 * ...at the loss of associativity enforcement. 
-		 * Associativity is left-right and is enforced in the parser now.
 		 */
 		rule function MultiplicativeExpr():Boolean
 		{
@@ -918,76 +887,6 @@ package memorphic.xpath.parser
 			return didntMatch();
 		}
 
-		/**
-		 * [37] NameTest ::=
-		 *			'*'
-		 *			| NCName ':' '*'
-		 *			| QName
-		 *	 
-		 *	@see #createToken() 	 
-		 */			
-	/*	rule function NameTest():Boolean
-		{
-			startRule(NAME_TEST);
-			if(QName()){
-				return match();
-			}else{
-				try {
-					nextToken();
-					if(token.value == "*"){
-						return match();
-					}else if(token.tokenType == XPathToken.NCNAME){
-						if(nextToken().value == ":"){
-							discardToken();
-							if(nextToken().value == "*"){
-								return match();
-							}
-						}
-					}
-				}catch(e:EOFError){
-					// continue and don't match
-				}
-			}
-			
-			return didntMatch();
-		}*/
-		
-		
-		/**
-		 * From my understanding...
-		 * 
-		 * 		QName ::= 
-		 * 			NCName ':' NCName
-		 * 			| NCName
-		 */ 
-/*		rule function QName():Boolean
-		{
-			startRule(QNAME);
-			try {
-				if(nextToken().tokenType != XPathToken.NCNAME){
-					return didntMatch();
-				}
-			}catch(e:EOFError){
-				return didntMatch();
-			}
-			try {
-				var state:SyntaxTreeState = getState();
-				if(nextToken().value == ":"){
-					discardToken();
-					if(nextToken().tokenType == XPathToken.NCNAME){
-						return match();
-					}else{
-						throw new SyntaxError("Expected local-name after ':'.")
-					}
-				}
-			}catch(e:EOFError){
-				// didn't match
-			}
-			restoreState(state);
-			return match();
-		}
-		*/
-		
 		
 		/**
 		 * 

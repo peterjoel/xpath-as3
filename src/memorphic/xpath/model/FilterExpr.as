@@ -32,11 +32,11 @@
 
 package memorphic.xpath.model
 {
-	final public class FilterExpr implements IExpression
+	public class FilterExpr implements IExpression
 	{
 		
-		private var primaryExpr:IExpression;
-		private var predicateList:PredicateList;
+		public var primaryExpr:IExpression;
+		public var predicateList:PredicateList;
 		
 		
 		

@@ -32,13 +32,13 @@
 
 package memorphic.xpath.model
 {
-	final public class FunctionCall implements IExpression
+	public class FunctionCall implements IExpression
 	{
 		
 		
-		private var functionName:String;
+		public var functionName:String;
 		
-		private var args:Array; // of IExpression
+		public var args:Array; // of IExpression
 		
 		
 		public function FunctionCall(funcName:String, args:Array)

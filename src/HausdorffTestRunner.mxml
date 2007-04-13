@@ -42,9 +42,9 @@
 
 
 			import flexunit.framework.TestResult;
-			import flexunit.framework.TestSuite;
+			import memorphic.xpath.XPathTests;
 			
-			import memorphic.xpath.model.StandardFunctionsTests;
+			import flexunit.framework.TestSuite;
 			import memorphic.xpath.XPathTests;
 						
 			private function onCreationComplete():void
@@ -59,7 +59,6 @@
 				var ts:TestSuite = new TestSuite();
 			
 				ts.addTestSuite(XPathTests);
-				ts.addTestSuite(StandardFunctionsTests);
 				return ts;
 			}
 

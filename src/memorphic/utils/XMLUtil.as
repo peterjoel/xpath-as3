@@ -45,8 +45,6 @@ package memorphic.utils
 			return node;
 		}
 		
-		
-		
 		public static function concatXMLLists(a:XMLList, b:XMLList):XMLList
 		{
 			for each(var node:XML in b){
@@ -55,18 +53,6 @@ package memorphic.utils
 				}
 			}
 			return a;
-		}
-		
-		
-		
-		public static function insertChildAtIndex(parent:XML, child:XML, index:int):int
-		{
-			var prevSibling:XML = null;
-			if(parent.hasComplexContent() && index > 0){
-				prevSibling = parent.children()[index-1];
-			} // otherwise prevSibling is null, so it will be inserted as first child
-			parent.insertChildAfter(prevSibling, child);
-			return parent.children().length();
 		}
 	}
 }

@@ -32,9 +32,9 @@
 
 package memorphic.xpath.model
 {
-	final public class Predicate
+	public class Predicate
 	{
-		private var expression:IExpression;
+		public var expression:IExpression;
 		
 		public function Predicate(expression:IExpression)
 		{

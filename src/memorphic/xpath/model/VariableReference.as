@@ -32,12 +32,12 @@
 
 package memorphic.xpath.model
 {
-	final public class VariableReference implements IExpression
+	public class VariableReference implements IExpression
 	{
 		
 		
-		private var prefix:String;
-		private var localName:String;
+		public var prefix:String;
+		public var localName:String;
 		
 		
 		public function VariableReference(prefix:String, localName:String)

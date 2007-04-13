@@ -62,20 +62,12 @@ package memorphic.parser
 		protected var token:Token;
 
 
-
-
-		public function SyntaxTree(tokenizer:Tokenizer){
-			this.tokenizer = tokenizer;
-			reset();
-		}
-		
-		
-		
 		/**
 		 * override in subclasses to invoke the root rule before returning this
 		 */
 		public function getTree():SyntaxTreeItem
 		{
+			//verifyTree();
 			return stack[0] as SyntaxTreeItem;
 		}
 
@@ -102,38 +94,24 @@ package memorphic.parser
 		}
 
 
+		public function SyntaxTree(tokenizer:Tokenizer){
+			this.tokenizer = tokenizer;
+			reset();
+		}
+
+
 		final public function reset():void
 		{
 			this.lastMatchedToken = new Token(null, null, 0);
 			this.tokenizer.reset();
 			this.token = null;
 			this.stack = new Array();
-			//lastTracedTokens = [];
 		}
 
-/*
-		private static var lastTracedTokens:Array = [];
-		private static function traceToken(token:Token):void
-		{
-			var n:int = lastTracedTokens.length;
-			while(n--){
-				if(Token(lastTracedTokens[n]).sourceIndex == token.sourceIndex
-					&& Token(lastTracedTokens[n]).value == token.value
-					&& Token(lastTracedTokens[n]).tokenType == token.tokenType){
-						
-						return;
-				}
-			}
-			lastTracedTokens.push(token);
-			trace(token);
-		}
-		*/
+
 		final protected function nextToken():Token
 		{
 			token = tokenizer.nextToken();
-			/////
-		//	traceToken(token);
-			/////
 			stack.push(token);
 			return token;
 		}

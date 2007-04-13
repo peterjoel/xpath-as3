@@ -32,7 +32,7 @@
 
 package memorphic.xpath.model
 {
-	final public class AxisNames
+	public class AxisNames
 	{
 		public static const ANCESTOR_OR_SELF:String = "ancestor-or-self";
 		public static const ANCESTOR:String = "ancestor";
@@ -70,7 +70,18 @@ package memorphic.xpath.model
 			}
 		}
 		
-
+		public static function expandAbbreviatedAxisName(abbr:String):String
+		{
+			switch(abbr){
+			case "":
+				return CHILD;
+			case "@":
+				return ATTRIBUTE;
+			default:
+				throw new ArgumentError();
+			}
+		}
+		
 		
 
 	}

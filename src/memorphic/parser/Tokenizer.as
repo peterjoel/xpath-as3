@@ -159,8 +159,6 @@ package memorphic.parser
 		//	}
 			return token;
 		}
-		
-
 
 
 
@@ -269,6 +267,16 @@ package memorphic.parser
 			
 		}
 
+
+
+
+		/**
+		 * @return int The size of the unparsed input stream
+		 */
+		public function bytesAvailable():int
+		{
+			return unparsedStream.length;
+		}
 
 
 		/**
