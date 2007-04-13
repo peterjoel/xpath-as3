@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionScriptProperties mainApplicationPath="QuickTest.as" version="1">
+<compiler additionalCompilerArguments="-locale en_US" copyDependentFiles="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersion="9.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="src" strict="true" warn="true">
+<compilerSourcePath>
+<compilerSourcePathEntry kind="1" linkType="1" path="${DOCUMENTS}\Adobe Labs Corelib\src\actionscript3"/>
+</compilerSourcePath>
+<libraryPath>
+<libraryPathEntry kind="3" linkType="2" path="${FRAMEWORKS}/libs/playerglobal.swc"/>
+<libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/utilities.swc"/>
+<libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/flex.swc" sourcepath="${FRAMEWORKS}/source"/>
+<libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/framework.swc" sourcepath="${FRAMEWORKS}/source"/>
+<libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/rpc.swc"/>
+<libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/charts.swc" sourcepath="${FRAMEWORKS}/source"/>
+<libraryPathEntry kind="1" linkType="1" path="${FRAMEWORKS}/locale/{locale}"/>
+<libraryPathEntry kind="3" linkType="1" path="/FlexUnit_as3/bin/FlexUnit_as3.swc" sourcepath="/FlexUnit_as3"/>
+</libraryPath>
+<sourceAttachmentPath>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/flex.swc" sourcepath="${FRAMEWORKS}/source"/>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/framework.swc" sourcepath="${FRAMEWORKS}/source"/>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/charts.swc" sourcepath="${FRAMEWORKS}/source"/>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="/FlexUnit_as3/bin/FlexUnit_as3.swc" sourcepath="/FlexUnit_as3"/>
+</sourceAttachmentPath>
+</compiler>
+<applications>
+<application path="QuickTest.as"/>
+<application path="src\RunAllTests.mxml"/>
+<application path="HausdorffTests.mxml"/>
+<application path="ParserTests.mxml"/>
+<application path="Parser2Tests.mxml"/>
+<application path="src\HausdorffTests.mxml"/>
+</applications>
+<buildCSSFiles/>
+</actionScriptProperties>
