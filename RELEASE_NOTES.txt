@@ -5,8 +5,9 @@
 
 1. Tokenizer caching has been removed as it was causing a bug. This should be reinstated if performance is an issue
 3. processing-instruction(name) NodeTest is not yet implemented
-4. General performance enhancements
-5. Error handling - need more useful messages
+4. General performance profiling
+5. I intend to add an "ignoreNamespaces" property, to simplify working with namespaces (at user's own risk!)
+
 
 
 # FOL differences from the w3c spec

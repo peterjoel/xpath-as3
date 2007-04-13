@@ -1,35 +1,3 @@
-/*
-	Copyright (c) 2007 Memorphic Ltd. All rights reserved.
-	
-	Redistribution and use in source and binary forms, with or without 
-	modification, are permitted provided that the following conditions 
-	are met:
-	
-		* Redistributions of source code must retain the above copyright 
-		notice, this list of conditions and the following disclaimer.
-	    	
-	    * Redistributions in binary form must reproduce the above 
-	    copyright notice, this list of conditions and the following 
-	    disclaimer in the documentation and/or other materials provided 
-	    with the distribution.
-	    	
-	    * Neither the name of MEMORPHIC LTD nor the names of its 
-	    contributors may be used to endorse or promote products derived 
-	    from this software without specific prior written permission.
-	
-	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-	OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-	SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-	LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-	THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-	(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
 package memorphic.xpath.parser
 {
 	
@@ -40,7 +8,6 @@ package memorphic.xpath.parser
 	import memorphic.parser.TokenMetrics;
 	import memorphic.xpath.model.AxisNames;
 	import memorphic.xpath.model.NodeTypes;
-	import memorphic.xpath.model.Operators;
 
 	/**
 	 * W3C XPath 1.0 Recommendation at http://www.w3.org/TR/xpath
@@ -103,7 +70,7 @@ package memorphic.xpath.parser
 					| NCName ':' '*'
 					| QName
 			 
-			@see XPathSyntaxTree	 
+			@see #createToken() 	 
 		*/	
 			
 		
@@ -148,7 +115,7 @@ package memorphic.xpath.parser
 			 
 			Note: //,/ <, <= and >= are in size order, to ensure largest match (TODO: find out why this is necessary)		
 		*/
-		pattern static const Operator:String = MultiplyOperator + "|" + buildRegExpORList("// / | + - = != <= >= < >");
+		pattern static const Operator:String = OperatorName + "|" + MultiplyOperator + "|" + buildRegExpORList("// / | + - = != <= >= < >");
 
 		/**
 			[31] Digits ::=
@@ -259,7 +226,6 @@ package memorphic.xpath.parser
 			case XPathToken.NAME_TEST:
 			case XPathToken.NODE_TYPE:
 			case XPathToken.OPERATOR:
-			case XPathToken.OPERATOR_NAME:
 			case XPathToken.FUNCTION_NAME:
 			case XPathToken.AXIS_NAME:
 			case XPathToken.LITERAL:
@@ -280,11 +246,10 @@ package memorphic.xpath.parser
 		private static function tokenMayPrecedeOperator(token:Token) : Boolean
 		{
 			switch (token.value){
-			case "@": case "::": case "(": case "[": case ",":
-			case ":": case "/": case "//":
+			case "@": case "::": case "(": case "[": case ",": case ":":
 				return false;
 			default:
-				if (token.tokenType == XPathToken.OPERATOR || token.tokenType == XPathToken.OPERATOR_NAME){
+				if (token.tokenType == XPathToken.OPERATOR){
 					return false;
 				} else {
 					return true;
@@ -362,8 +327,7 @@ package memorphic.xpath.parser
 					}
 				}else if(type==XPathToken.LITERAL){
 					// remove the quotes from string literals
-					// value = value.substr(1, value.length-2);
-					// UPDATE:  DO NOT remove quotes because the string "/" will be interpreted as a path!
+					value = value.substr(1, value.length-2);
 				}
 			}
 			
@@ -372,10 +336,7 @@ package memorphic.xpath.parser
 		
 		
 		
-		/*
-			TODO: I think this will be a lot cleaner if we just emit NCNames and have the SyntaxTree
-			construct QNames instead.
-		*/
+		
 		private function resolveNCName(value:String, sourceIndex:int):Token
 		{
 			if(AxisNames.isAxisName(value)){

@@ -1,35 +1,3 @@
-/*
-	Copyright (c) 2007 Memorphic Ltd. All rights reserved.
-	
-	Redistribution and use in source and binary forms, with or without 
-	modification, are permitted provided that the following conditions 
-	are met:
-	
-		* Redistributions of source code must retain the above copyright 
-		notice, this list of conditions and the following disclaimer.
-	    	
-	    * Redistributions in binary form must reproduce the above 
-	    copyright notice, this list of conditions and the following 
-	    disclaimer in the documentation and/or other materials provided 
-	    with the distribution.
-	    	
-	    * Neither the name of MEMORPHIC LTD nor the names of its 
-	    contributors may be used to endorse or promote products derived 
-	    from this software without specific prior written permission.
-	
-	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-	OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-	SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-	LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-	THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-	(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
 package memorphic.parser
 {
 	import flash.errors.EOFError;
@@ -62,20 +30,12 @@ package memorphic.parser
 		protected var token:Token;
 
 
-
-
-		public function SyntaxTree(tokenizer:Tokenizer){
-			this.tokenizer = tokenizer;
-			reset();
-		}
-		
-		
-		
 		/**
 		 * override in subclasses to invoke the root rule before returning this
 		 */
 		public function getTree():SyntaxTreeItem
 		{
+			//verifyTree();
 			return stack[0] as SyntaxTreeItem;
 		}
 
@@ -102,38 +62,24 @@ package memorphic.parser
 		}
 
 
+		public function SyntaxTree(tokenizer:Tokenizer){
+			this.tokenizer = tokenizer;
+			reset();
+		}
+
+
 		final public function reset():void
 		{
 			this.lastMatchedToken = new Token(null, null, 0);
 			this.tokenizer.reset();
 			this.token = null;
 			this.stack = new Array();
-			//lastTracedTokens = [];
 		}
 
-/*
-		private static var lastTracedTokens:Array = [];
-		private static function traceToken(token:Token):void
-		{
-			var n:int = lastTracedTokens.length;
-			while(n--){
-				if(Token(lastTracedTokens[n]).sourceIndex == token.sourceIndex
-					&& Token(lastTracedTokens[n]).value == token.value
-					&& Token(lastTracedTokens[n]).tokenType == token.tokenType){
-						
-						return;
-				}
-			}
-			lastTracedTokens.push(token);
-			trace(token);
-		}
-		*/
+
 		final protected function nextToken():Token
 		{
 			token = tokenizer.nextToken();
-			/////
-		//	traceToken(token);
-			/////
 			stack.push(token);
 			return token;
 		}

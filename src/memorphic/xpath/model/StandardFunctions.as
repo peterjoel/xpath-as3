@@ -1,37 +1,6 @@
-/*
-	Copyright (c) 2007 Memorphic Ltd. All rights reserved.
-	
-	Redistribution and use in source and binary forms, with or without 
-	modification, are permitted provided that the following conditions 
-	are met:
-	
-		* Redistributions of source code must retain the above copyright 
-		notice, this list of conditions and the following disclaimer.
-	    	
-	    * Redistributions in binary form must reproduce the above 
-	    copyright notice, this list of conditions and the following 
-	    disclaimer in the documentation and/or other materials provided 
-	    with the distribution.
-	    	
-	    * Neither the name of MEMORPHIC LTD nor the names of its 
-	    contributors may be used to endorse or promote products derived 
-	    from this software without specific prior written permission.
-	
-	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT 
-	OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-	SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
-	LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
-	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
-	THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-	(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-	OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
 package memorphic.xpath.model
 {
+	import flash.xml.XMLNodeType;
 	import memorphic.utils.XMLUtil;
 	
 	
@@ -108,10 +77,6 @@ package memorphic.xpath.model
 		 * 		id("foo") selects the element with unique ID foo
 		 * 
 		 * 		id("foo")/child::para[position()=5] selects the fifth para child of the element with unique ID foo
-		 * 
-		 * 
-		 * Contrary to the spec, I have permitted id to reside in any namespace, as opposed to xml:id, which does not
-		 * reflect the vast majority of usage. TODO: Perhaps this could be made into an optional feature via a flag? 
 		 */
 		public function id(context:XPathContext, idArg:Object):XMLList
 		{
@@ -123,11 +88,10 @@ package memorphic.xpath.model
 				}
 			}else{
 				idArg = idArg.toString();
-				result = XMLUtil.rootNode(context.contextNode).descendants().(attribute("id") == idArg);
-				if(result.length() > 0){
+				result = XMLUtil.rootNode(context.contextNode).descendants().(@id == idArg);
+				if(result.length() > 1){
 					result = XMLList(result[0]);
 				}
-			
 			}
 			return result;
 		}
@@ -174,10 +138,8 @@ package memorphic.xpath.model
 			var node:XML;
 			if(nodeSet == null){
 				node = context.contextNode;
-			}else if (nodeSet.length() > 0){
-				node = nodeSet[0];
 			}else{
-				return "";
+				node = nodeSet[0];
 			}
 			return node.namespace().uri;
 		}
@@ -202,7 +164,7 @@ package memorphic.xpath.model
 			var node:XML;
 			if(nodeSet == null){
 				node = context.contextNode;
-			}else if(nodeSet.length() == 0){
+			}else if(nodeSet.length() > 0){
 				return "";
 			}else{
 				node = nodeSet[0];
@@ -263,9 +225,13 @@ package memorphic.xpath.model
 		public function string(context:XPathContext, arg:Object=null):String
 		{
 			if(arg == null){
-				return TypeConversions.toString(context.contextNode.toString());
+				return context.contextNode.toString();
+			}else if(arg is String){
+				return arg as String;
+			}else if(arg is XMLList){
+				return arg[0].toString();
 			}else{
-				return TypeConversions.toString(arg);
+				return arg.toString();
 			}
 		}
 		
@@ -350,7 +316,7 @@ package memorphic.xpath.model
 			if(index == -1){
 				return "";
 			}else{
-				return basket.substr(index+ apple.length);
+				return basket.substr(index);
 			}
 		}
 		
@@ -365,9 +331,9 @@ package memorphic.xpath.model
 		public function substring(context:XPathContext, string:*, from:*, length:*=null):String
 		{
 			if(length == null){
-				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from)-1);
+				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from));
 			}else{
-				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from)-1, TypeConversions.toNumber(length));
+				return TypeConversions.toString(string).substr(TypeConversions.toNumber(from), TypeConversions.toNumber(length));
 			}
 		}
 		
@@ -401,19 +367,11 @@ package memorphic.xpath.model
 				string = context.contextNode;
 			}
 			var str:String = TypeConversions.toString(string);
-			if(str == ""){
-				return "";
-			}
 			// replace any blocks of whitespace with a single space
 			str = str.replace(/\s+/g, " ");
 			// now trim the ends
 			var r:RegExp = /^\s?(\S.*\S)\s?$/;
-			var matches:Object = r.exec(str);
-			if(matches){
-				return matches[1];
-			}else{
-				return "";
-			}
+			return r.exec(str)[1];
 		}
 		
 		
