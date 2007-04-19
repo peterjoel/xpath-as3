@@ -1,0 +1,15 @@
+Basic overview of how to use the XPath library
+
+= Executing XPath Statements =
+
+XPath queries are evaluated using the XPathQuery object.
+
+{{{
+// create the XPathQuery instance and parse the path
+var myQuery:XPathQuery = new XPathQuery("path/to/evaluate");
+// execute the statement on an XML object and get the result
+var result:XMLList = myQuery.exec(myXML);
+}}}
+
+
+
