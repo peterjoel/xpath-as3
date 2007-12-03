@@ -19,7 +19,7 @@ The easiest way to select nodes that are in XML namespaces is via the `openAllNa
 
 {{{
 var myQuery:XPathQuery = new XPathQuery("path/to/evaluate");
-myQuery.openAllNamespaces = true;
+myQuery.context.openAllNamespaces = true;
 }}}
 
 To do it properly, you need to register namespace prefixes with the corresponding URI. This prefix does not need to match the prefix used in the XML document, but must match the prefix that you use in your XPath statements.
