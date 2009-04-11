@@ -3,10 +3,14 @@
 
 	<!-- Define variables/paths used in this build script -->
 	<property file="./build/build.properties" />
-	<property file="./build/flex.sdk.${flex.sdk.version}.properties"/>
 
+	<!--
+		Have you edit the properties file to make sure the paths are right oo your system?
+	-->
 	<target name="properties">
-		<fail unless="flex.sdk.version"></fail>
+		<fail unless="asdoc.exe">The "asdoc.exe" property must be set in ${build.dir}/build.properties.</fail>
+		<fail unless="compc.exe">The "compc.exe" property must be set in ${build.dir}/build.properties.</fail>
+		<fail unless="mxmlc.exe">The "mxmlc.exe" property must be set in ${build.dir}/build.properties.</fail>
 	</target>
 	
 	<!--
@@ -14,7 +18,7 @@
 		in the bin directory.
 	-->
 	<target name="compileTests" depends="properties">
-		<exec executable="${flex.sdk.mxmlc}" dir="${basedir}">
+		<exec executable="${mxmlc.exe}" dir="${basedir}">
 			<!-- Point to the main test runner's application mxml file -->
 			<arg line="'${tests.dir}/${testRunner.dir}/${testRunner.name}.mxml'" />
 			
@@ -26,16 +30,15 @@
 			<arg line="-sp ${tests.dir}" />
 			
 			<!-- Include the necessary framework libraries in the class path -->
-			<arg line="-l '${flex.sdk.lib.dir}'" />
+			<arg line="-l '${flex2sdk.lib.dir}'" />
 			
 			<!-- Include in the flexunit.swc in the class path -->
 			<arg line="-l ${flexunit.swc}" />
 			
 			<!-- Include locale-specific items in the path -->
-			<arg line="-locale ${flex.locale}" />
-			<arg line="-l '${flex.sdk.locale.dir}'" />
+			<arg line="-locale ${flex2sdk.locale}" />
+			<arg line="-l '${flex2sdk.locale.dir}'" />
 		</exec>
-		
 	</target>
 	
 	<!--
@@ -57,7 +60,7 @@
 		Compile all of the classes under the "src" tree into a .swc file
 	-->
 	<target name="lib" depends="properties">
-		<exec executable="${flex.sdk.compc}" dir="${basedir}">
+		<exec executable="${compc.exe}" dir="${basedir}">
 			<!-- Specify the name of the output file -->
 			<arg line="-o '${bin.dir}/${library.name}.swc'" />
 			
@@ -80,7 +83,7 @@
 		</delete>
 		-->
 		
-		<exec executable="${flex.sdk.asdoc}" spawn="no">
+		<exec executable="${asdoc.exe}" spawn="no">
 			<!-- Place the documentation in the "docs" directory -->
 			<arg line="-o ${docs.dir}" />
 			
@@ -91,7 +94,7 @@
 			<arg line="-ds ${src.dir} " />
 			
 			<!-- Include the library name in the window title -->
-			<arg line="-window-title '${library.name}' "/>
+			<arg line="-window-title 'Adobe ActionScript 3.0 Library - ${library.name}' "/>
 		</exec>
 	</target>
 	
@@ -116,7 +119,7 @@
 		<copy todir="${tmp.dir}/src">
 			<fileset dir="${src.dir}"></fileset>
 		</copy>
-		<zip destfile="${bin.dir}/${library.name}-${version.no}.zip" basedir="${tmp.dir}" />
+		<zip destfile="${bin.dir}/xpath-as3-${version.no}.zip" basedir="${tmp.dir}" />
 		<delete dir="${tmp.dir}"/>
 	</target>
 

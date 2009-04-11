@@ -161,8 +161,7 @@ package memorphic.xpath.parser
 					Digits ('.' Digits?)?
 					| '.' Digits
 		*/
-		pattern static const Num:String = Digits + " (?:\\. " + Digits + ")? | \\. " + Digits;
-		//Digits + " (\\. " + Digits + "?)? | \\. " + Digits;
+		pattern static const Num:String = Digits + " (\\. " + Digits + "?)? | \\. " + Digits;
 
 		/**
 			[29] Literal ::=

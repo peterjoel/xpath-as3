@@ -87,7 +87,6 @@ package memorphic.xpath.parser
 				modelMap = new Dictionary();
 				tokenizer.rawData = source;
 				treeRoot = syntaxTree.getTree();
-				syntaxTree.verifyTree();
 				treeWalker = new TreeWalker(treeRoot);
 				walkTree();
 				var path:IExpression = IExpression( getModel(treeRoot) );
@@ -119,8 +118,7 @@ package memorphic.xpath.parser
 		
 		private function eachToken():void
 		{
-			const tokenType:String = currentToken.tokenType;
-			switch(tokenType){
+			switch(currentToken.tokenType){
 			case XPathSyntaxTree.LOCATION_PATH:
 				parseLocationPath();
 				break;
@@ -209,14 +207,13 @@ package memorphic.xpath.parser
 				parseAbbreviatedStep();
 				break;
 			case XPathToken._EXPR_TOKEN_MISC:
-				// ignore: these tokens are interpreted when the parent is parsed
-				// parseMiscToken();
+				parseMiscToken();
 				break;
 			case XPathToken.VARIABLE_REFERENCE:
 				setModel(new VariableReference(QNameToken(currentToken).prefix, QNameToken(currentToken).localName));
 				break;
 			default:
-				// All tokens outputted by the tokenizer are now supported so we shouldn't reach this point
+				// ignore other tokens (For now!!!)
 				throw new SyntaxError(currentToken.tokenType + " is not yet supported");
 			}	
 		}
@@ -259,8 +256,11 @@ package memorphic.xpath.parser
 		{
 			var step:Step = Step(getModel(currentToken.children[0]));
 			var path:LocationPath = LocationPath(getModel(currentToken.children[1]));
+			//var path:LocationPath = LocationPath(getModel(currentToken.children[0]));
+			//var path:LocationPath = LocationPath(condenseToken());
 			path.absolute = true;
 			path.steps.unshift(step);
+			//path.steps.unshift(Step.ABBREVIATED_DESC_OR_SELF);
 			setModel(path);
 		}
 		
@@ -315,23 +315,23 @@ package memorphic.xpath.parser
 			}else if(abbr == "."){
 				setModel(Step.ABBREVIATED_SELF);
 			}else{
-				throw new Error("A token was parsed as an abbeviated step, but it was neither of '.' or '..'");
+				throw new Error("this shouldn't happen");
 			}
 		}
 		
 		
-//		// nothing realy happens here... it's for debuggin really...
-//		private function parseMiscToken():void
-//		{
-//			switch(currentToken.value){
-//			case "..":
-//			case ".":
-//			case "@":
-//				break;
-//			default:
-//				throw new Error("this token isn't implemented: " + currentToken.tokenType + " " + currentToken.value);
-//			}
-//		}
+		// nothing realy happens here... it's for debuggin really...
+		private function parseMiscToken():void
+		{
+			switch(currentToken.value){
+			case "..":
+			case ".":
+			case "@":
+				break;
+			default:
+				throw new Error("this token isn't implemented: " + currentToken.tokenType + " " + currentToken.value);
+			}
+		}
 		
 		
 		

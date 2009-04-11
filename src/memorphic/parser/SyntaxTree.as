@@ -79,11 +79,7 @@ package memorphic.parser
 			return stack[0] as SyntaxTreeItem;
 		}
 
-
-		/**
-		 * Will throw a ParseError if there are unused tokens
-		 */
-		public function verifyTree():void
+		protected function verifyTree():void
 		{
 			if(stack.length > 1){
 				throw new ParseError("Some parsing went awry",
@@ -95,15 +91,12 @@ package memorphic.parser
 					tokenizer.getTokenMetrics(firstUnmatchedToken()));
 			}*/
 			var eof:Boolean = false;
-			var lastToken:Token;
 			try {
-				lastToken = tokenizer.nextToken();
+				tokenizer.nextToken();
 			}catch(e:EOFError){
 				eof = true;
 			}
 			if(!eof){
-				throw new ParseError("Some parsing went awry", null);
-			}else if(lastToken && lastToken.sourceIndex < tokenizer.rawData.length){
 				throw new ParseError("Some parsing went awry", null);
 			}
 		}
