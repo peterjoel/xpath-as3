@@ -44,7 +44,10 @@ package memorphic.xpath {
 	
 	
 	public class XPathUtilsTests extends TestCase {
-				
+		
+		
+			TestResult.rethrowErrors = true;
+		
 		private var cds:XML;
 		private var menu:XML;
 		private var xhtml:XML;
