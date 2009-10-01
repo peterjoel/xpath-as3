@@ -37,6 +37,7 @@ myQuery.context.useSourceNamespacePrefixes = true;
 The easiest (although perhaps least safe) way is with the `openAllNamespaces` property. Although, if there are several namespaces used in the document, there is a chance of name conflicts:
 
 {{{
+// no need for prefixes in this statement
 var myQuery:XPathQuery = new XPathQuery("path/to/evaluate");
 myQuery.context.openAllNamespaces = true;
 }}}
