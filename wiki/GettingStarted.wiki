@@ -75,8 +75,9 @@ public class MyContext extends XPathContext {
   }
   
   // custom XPath functions must receive a reference to the 
-  //context as their first argument 
-  private function customXPathFunction( context:MyContext, arg1, arg2 ):String
+  // context as their first argument. You may have any number of other 
+  // arguments of any type, and the return value can be any type.
+  private function customXPathFunction( context:MyContext, arg1, arg2.. ):String
   { 
      // add code here
   }
@@ -94,5 +95,6 @@ public class MyContext extends XPathContext {
 }}}
 
 {{{
-var myQuery:XPathQuery = new XPathQuery("path/to/evaluate", new MyContext());
+var path:String = "path/to/evaluate[@att = custom-function(1,2)]";
+var myQuery:XPathQuery = new XPathQuery(path, new MyContext());
 }}}
